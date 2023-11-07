@@ -157,7 +157,7 @@ while place_order:
                     
                     order_list['Item_name'] = item_selection_item_name
                     order_list['Price'] = item_selection_item_price * int(menu_item_quantity)
-                    order_list['Quantity'] = menu_item_quantity
+                    order_list['Quantity'] = int(menu_item_quantity)
 
                     # Tell the customer that their input isn't valid
 
