@@ -121,48 +121,33 @@ while place_order:
                     }
                     i += 1
             # 2. Ask customer to input menu item number
-            menu_item_num_from_input = input ("Type menu item number: ")
+            menu_selection = input ("Type menu item number: ")
             
             # 3. Check if the customer typed a number
-            if menu_item_num_from_input.isdigit():
+            if menu_selection.isdigit():
                 # Convert the menu selection to an integer                
-                menu_item_num = int(menu_item_num_from_input)
+                menu_item_num = int(menu_selection)
                 
                 # 4. Check if the menu selection is in the menu items
                 if menu_item_num in menu_items.keys():
                     # Store the item name as a variable
-                    ###print("Its there man")            
-                    ###print (menu_items[menu_item_num])
-                    
                     item_selection = menu_items[menu_item_num]
-                    
-                    ###print(f"item selection : {item_selection}")
-                    ###exit
-                    
                     item_selection_item_name = item_selection['Item name']
-                    print (item_selection_item_name)
                     item_selection_item_price = item_selection['Price']
-                    print (item_selection_item_price)
                                                         
                     # Ask the customer for the quantity of the menu item
                     menu_item_quantity = input (f"How many '{item_selection_item_name}' do you want: ")
-                    print(menu_item_quantity)
 
                     # Check if the quantity is a number, default to 1 if not
                     if not menu_item_quantity.isdigit():
+                        print("You have not entered a valid number")
                         menu_item_quantity = 1
                         
                     # Add the item name, price, and quantity to the order list
-                    ###order_list.append(item_selection_item_name)
-                    ###print (order_list)
-                                        
-                    order_list['Price'] = item_selection_item_price * int(menu_item_quantity)
-                    order_list['Quantity'] = int(menu_item_quantity)
-                    
-                    print (f"This my 'order-list' of {type(order_list)} {order_list}")
-
+                    #order_list['Price'] = round ((item_selection_item_price * int(menu_item_quantity)),2)
+                    order_list['Price'] = round(item_selection_item_price,2)
+                    order_list['Quantity'] = int(menu_item_quantity)                                        
                     order[item_selection_item_name] = order_list
-                    print(f"Raw 'order-1st' dictionary :--> {order}\n")
 
                     # Tell the customer that their input isn't valid
 
@@ -177,7 +162,7 @@ while place_order:
         print("You didn't select a number.")
         continue
 
-    while True:
+    while True: 
         # Ask the customer if they would like to order anything else
         keep_ordering = input("Would you like to keep ordering? (Y)es or (N)o ")
 
@@ -206,29 +191,34 @@ while place_order:
 
 # Print out the customer's order
 print("This is what we are preparing for you.\n")
-###print(order.items())
 
 # Uncomment the following line to check the structure of the order
-print(f"Raw 'order' dictionary :--> {order}\n")
-
+# print(order)
 
 print("Item name                 | Price  | Quantity")
 print("--------------------------|--------|----------")
 
 # 6. Loop through the items in the customer's order
-for ordered_item_name, ordered_item_name_price_qty in order.items():    
+
+for item in order:    
     # 7. Store the dictionary items as variables  
-    print(f"{type(ordered_item_name)} -- {type(ordered_item_name_price_qty)}\n")
-    print(f"Raw 'ordered_item_name_price_qty' dictionary :--> {ordered_item_name_price_qty}\n")
-    for price, quantity in ordered_item_name_price_qty.items():       
-        print (f"Price: {price} and Qty: {quantity}")
+    item_name_str = item
+    price_qty_dict = order[item]
+    
     # 8. Calculate the number of spaces for formatted printing
-        ###num_item_spaces = 24 - len(ordered_item_name + price) - 3
+    num_item_spaces = 26 - len(item_name_str)
+    num_price_spaces = 6 - len(str((price_qty_dict['Price'])))
     # 9. Create space strings
-        item_spaces = " " * num_item_spaces        
+    item_spaces = " " * num_item_spaces
+    price_spaces = " " * num_price_spaces        
     # 10. Print the item name, price, and quantity
-        ###print(f"{ordered_item_name}   {item_spaces} | ${price} | {quantity}")
+    print (f"{item_name_str}{item_spaces}| ${price_qty_dict['Price']}{price_spaces}| {price_qty_dict['Quantity']}")
 
 # 11. Calculate the cost of the order using list comprehension
 # Multiply the price by quantity for each item in the order list, then sum()
 # and print the prices.
+
+order_total = sum(item["Price"] * item["Quantity"] for item in order.values())
+print("----------------------------------------------")
+print(f"Your Order total is: ${order_total:.2f}")
+print("----------------------------------------------")
